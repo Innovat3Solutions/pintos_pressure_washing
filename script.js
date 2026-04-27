@@ -286,6 +286,63 @@ if (hamburger) {
   window.addEventListener('touchend', end);
 })();
 
+// Reviews carousel
+(function(){
+  const root = document.getElementById('reviewsCarousel');
+  const track = document.getElementById('revTrack');
+  const dotsEl = document.getElementById('revDots');
+  if(!root || !track) return;
+
+  const cards = Array.from(track.children);
+  if(!cards.length) return;
+
+  function visibleCount(){
+    if(window.innerWidth <= 600) return 1;
+    if(window.innerWidth <= 900) return 2;
+    return 3;
+  }
+
+  let pageIndex = 0;
+  let pages = 0;
+
+  function buildDots(){
+    pages = Math.max(1, cards.length - visibleCount() + 1);
+    dotsEl.innerHTML = '';
+    for(let i=0;i<pages;i++){
+      const d = document.createElement('button');
+      d.className = 'rev-dot' + (i===pageIndex?' active':'');
+      d.setAttribute('aria-label', `Go to review ${i+1}`);
+      d.addEventListener('click', ()=>go(i));
+      dotsEl.appendChild(d);
+    }
+  }
+
+  function go(i){
+    pageIndex = (i + pages) % pages;
+    const card = cards[0];
+    const style = window.getComputedStyle(track);
+    const gap = parseFloat(style.columnGap || style.gap) || 0;
+    const cardWidth = card.getBoundingClientRect().width;
+    const offset = pageIndex * (cardWidth + gap);
+    track.style.transform = `translateX(-${offset}px)`;
+    dotsEl.querySelectorAll('.rev-dot').forEach((d,idx)=>d.classList.toggle('active', idx===pageIndex));
+  }
+
+  root.querySelector('.rev-prev').addEventListener('click', ()=>go(pageIndex-1));
+  root.querySelector('.rev-next').addEventListener('click', ()=>go(pageIndex+1));
+
+  let autoplay = setInterval(()=>go(pageIndex+1), 6000);
+  root.addEventListener('mouseenter', ()=>clearInterval(autoplay));
+  root.addEventListener('mouseleave', ()=>{ autoplay = setInterval(()=>go(pageIndex+1), 6000); });
+
+  buildDots();
+  window.addEventListener('resize', ()=>{
+    pageIndex = 0;
+    buildDots();
+    go(0);
+  });
+})();
+
 // Scroll reveal — fade-up with stagger
 (function(){
   const reveal = new IntersectionObserver((entries) => {
