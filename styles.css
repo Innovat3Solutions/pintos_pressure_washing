@@ -109,8 +109,24 @@ h2.section-title.light,.process h2{color:#fff}
   .nav-call{padding:6px}
 }
 @media(max-width:900px){
-  .nav-pill, .nav-call{display:none}
+  .nav-pill{display:none}
+  .nav-call{display:none}
   .hamburger{display:block}
+
+  .nav.nav-open .nav-pill{
+    display:block;
+    position:absolute;top:74px;right:20px;left:20px;
+    background:#fff;border-radius:14px;
+    padding:14px;
+    box-shadow:0 16px 40px rgba(13,33,72,.18);
+    pointer-events:auto;
+  }
+  .nav.nav-open .nav-links{
+    flex-direction:column;align-items:stretch;gap:2px;
+  }
+  .nav.nav-open .nav-links a{
+    padding:14px 16px;border-radius:8px;font-size:15px;
+  }
 }
 
 /* push hero down to account for floating nav */

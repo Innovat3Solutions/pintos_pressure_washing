@@ -13,22 +13,26 @@
 })();
 
 // Mobile nav toggle
-const hamburger = document.querySelector('.hamburger');
-const navLinks = document.querySelector('.nav-links');
-if (hamburger) {
-  hamburger.addEventListener('click', () => {
-    const open = navLinks.style.display === 'flex';
-    navLinks.style.display = open ? '' : 'flex';
-    navLinks.style.flexDirection = 'column';
-    navLinks.style.position = 'absolute';
-    navLinks.style.top = '70px';
-    navLinks.style.right = '20px';
-    navLinks.style.background = '#fff';
-    navLinks.style.padding = '20px';
-    navLinks.style.borderRadius = '8px';
-    navLinks.style.boxShadow = '0 8px 24px rgba(0,0,0,.1)';
+(function(){
+  const nav = document.querySelector('.nav');
+  const hamburger = document.querySelector('.hamburger');
+  if (!nav || !hamburger) return;
+
+  hamburger.addEventListener('click', (e) => {
+    e.stopPropagation();
+    nav.classList.toggle('nav-open');
   });
-}
+
+  // Close on link tap
+  nav.querySelectorAll('.nav-links a').forEach(a => {
+    a.addEventListener('click', () => nav.classList.remove('nav-open'));
+  });
+
+  // Close on outside tap
+  document.addEventListener('click', (e) => {
+    if (!nav.contains(e.target)) nav.classList.remove('nav-open');
+  });
+})();
 
 // Service area tabs + interactive Leaflet map
 (function(){
