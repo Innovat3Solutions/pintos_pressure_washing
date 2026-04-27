@@ -24,7 +24,7 @@
   });
 
   // Close on link tap
-  nav.querySelectorAll('.nav-links a').forEach(a => {
+  nav.querySelectorAll('.nav-links a, .nav-mobile-call').forEach(a => {
     a.addEventListener('click', () => nav.classList.remove('nav-open'));
   });
 
